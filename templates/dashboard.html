@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏠 Dashboard - VibeCoding Evaluation Tool</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;min-height:100vh;position:relative}#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out;will-change:transform}@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}.navbar{position:relative;z-index:2;background:rgba(255,255,255,0.05);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)}.navbar h1{color:#fff;font-size:1.5em}.navbar .user-info{color:#a0aec0;display:flex;align-items:center;gap:20px}.btn-logout{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;transition:all 0.3s}.btn-logout:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(102,126,234,0.4)}.container{position:relative;z-index:2;max-width:1200px;margin:40px auto;padding:20px}.header{text-align:center;color:#fff;margin-bottom:40px;animation:fadeInDown 0.8s ease}@keyframes fadeInDown{from{opacity:0;transform:translate3d(0,-30px,0)}to{opacity:1;transform:translate3d(0,0,0)}}.header h2{font-size:2.5em;margin-bottom:10px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:40px}.card{background:rgba(255,255,255,0.05);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:30px;transition:all 0.3s;cursor:pointer;animation:fadeInUp 0.8s ease}@keyframes fadeInUp{from{opacity:0;transform:translate3d(0,30px,0)}to{opacity:1;transform:translate3d(0,0,0)}}.card:hover{transform:translateY(-10px);box-shadow:0 20px 40px rgba(102,126,234,0.3)}.card-icon{font-size:3em;margin-bottom:15px}.card-title{color:#fff;font-size:1.5em;margin-bottom:10px}.card-desc{color:#a0aec0;font-size:0.95em;line-height:1.6}.btn-action{display:inline-block;margin-top:20px;padding:12px 25px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;text-decoration:none;border-radius:10px;transition:all 0.3s}.btn-action:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(102,126,234,0.4)}@media(max-width:768px){.navbar{padding:15px 20px;flex-direction:column;gap:15px}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<nav class="navbar">
+<h1>🎓 VibeCoding Evaluation Tool</h1>
+<div class="user-info">
+<span>👤 Welcome, {{user}}!</span>
+<a href="/logout" class="btn-logout">🚪 Logout</a>
+</div>
+</nav>
+<div class="container">
+<div class="header">
+<h2>🏠 Dashboard</h2>
+<p style="color:#a0aec0;font-size:1.1em">Choose an action to get started</p>
+</div>
+<div class="cards">
+<div class="card">
+<div class="card-icon">📝</div>
+<div class="card-title">New Evaluation</div>
+<div class="card-desc">Start a new project evaluation with all entertainment features</div>
+<a href="/evaluate" class="btn-action">🚀 Start Evaluation</a>
+</div>
+<div class="card">
+<div class="card-icon">👥</div>
+<div class="card-title">Students List</div>
+<div class="card-desc">View all evaluated students with detailed information and scores</div>
+<a href="/students" class="btn-action">📋 View Students</a>
+</div>
+<div class="card">
+<div class="card-icon">📊</div>
+<div class="card-title">Statistics</div>
+<div class="card-desc">View comprehensive statistics and analytics of all evaluations</div>
+<a href="/statistics" class="btn-action">📈 View Statistics</a>
+</div>
+<div class="card">
+<div class="card-icon">🔄</div>
+<div class="card-title">Compare Students</div>
+<div class="card-desc">Compare performance between students with visual radar charts</div>
+<a href="/compare" class="btn-action">🔄 Compare</a>
+</div>
+<div class="card">
+<div class="card-icon">⚙️</div>
+<div class="card-title">Settings</div>
+<div class="card-desc">Customize rubrics, evaluation criteria, and system preferences</div>
+<a href="/settings" class="btn-action">⚙️ Open Settings</a>
+</div>
+<div class="card">
+<div class="card-icon">🔧</div>
+<div class="card-title">Admin Panel</div>
+<div class="card-desc">Manage rubrics, add/edit evaluation criteria, and configure system</div>
+<a href="/admin" class="btn-action">🔧 Admin Panel</a>
+</div>
+</div>
+</div>
+<script>
+function createParticles(){const container=document.getElementById('particles');for(let i=0;i<50;i++){const particle=document.createElement('div');particle.className='particle';particle.style.left=Math.random()*100+'%';particle.style.top=Math.random()*100+'%';particle.style.animationDelay=Math.random()*15+'s';particle.style.animationDuration=(10+Math.random()*10)+'s';container.appendChild(particle)}}window.onload=createParticles;
+</script>
+</body>
+</html>

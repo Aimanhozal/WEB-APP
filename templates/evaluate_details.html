@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 Evaluation — Student Details</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;color:#fff;min-height:100vh}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out}
+@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}
+.container{max-width:900px;margin:40px auto;padding:20px}
+.card{background:rgba(255,255,255,0.03);padding:30px;border-radius:12px;border:1px solid rgba(255,255,255,0.05)}
+.input-group{margin-bottom:12px}
+.input-group label{display:block;margin-bottom:6px;color:#a0aec0}
+.input-group input, .input-group select{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#fff}
+select{color:#fff !important;background-color:#1a1a3e !important}
+select option{background-color:#2a2a5e !important;color:#ffffff !important;padding:12px !important;font-weight:500 !important}
+select option:hover,select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+body.light-mode select{background-color:#ffffff !important;color:#000000 !important}
+body.light-mode select option{background-color:#ffffff !important;color:#000000 !important;font-weight:500 !important;padding:12px !important}
+body.light-mode select option:hover,body.light-mode select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+body.light-mode select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+.btn{padding:12px 18px;border-radius:10px;border:none;cursor:pointer}
+.btn-continue{background:linear-gradient(135deg,#667eea,#10b981);color:#fff;font-weight:700}
+.btn-back{background:#2d3748;color:#fff}
+.info{color:#a0aec0;margin-top:8px}
+
+/* Dropdown styles for report selects */
+.template-dropdown{position:relative}
+.template-btn{width:100%;text-align:left;padding:12px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:#fff;cursor:pointer}
+.dropdown-menu{position:absolute;left:0;right:0;top:calc(100% + 8px);background:linear-gradient(180deg,#0b1220,#071025);border:1px solid rgba(255,255,255,0.03);padding:8px;border-radius:8px;max-height:220px;overflow:auto;z-index:999}
+.tpl-option{padding:8px;border-radius:8px;margin-bottom:6px;cursor:pointer;color:#fff}
+.tpl-option .tpl-text{color:#e6eef8;white-space:normal}
+.tpl-option.empty{background:transparent;color:#9aa4c7;font-weight:600}
+.tpl-option:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+.opt-excellent{background:linear-gradient(135deg,#10b981,#059669)}
+.opt-good{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.opt-average{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.opt-poor{background:linear-gradient(135deg,#ef4444,#dc2626)}
+</style> 
+</head>
+<body>
+<div id="particles"></div>
+<div class="container">
+  <a href="/dashboard" class="btn btn-back" style="display:inline-block;margin-bottom:18px">← Dashboard</a>
+  <h1 style="margin-bottom:16px">📝 Student Details</h1>
+  <div class="card" style="display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start">
+    <div>
+      <h3 style="margin-bottom:10px">Student data:</h3>
+      <div class="input-group">
+        <label>First name: *</label>
+        <input id="firstName" type="text" placeholder="" required>
+      </div>
+      <div class="input-group">
+        <label>Last name: *</label>
+        <input id="lastName" type="text" placeholder="" required>
+      </div>
+      <div class="input-group">
+        <label>Matriculation number: *</label>
+        <input id="studentId" type="text" placeholder="" required>
+      </div>
+      <div class="input-group">
+        <label>Gender</label>
+        <select id="gender">
+          <option value="">Select gender</option>
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+          <option value="Diverse">Diverse</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+      </div>
+
+      <h3 style="margin:18px 0 10px">Report data:</h3>
+      <div class="input-group">
+        <label>Report *</label>
+        <select id="report" required>
+          <option value="">Select report</option>
+          <option class="opt-good" value="Bachelor Thesis">Bachelor Thesis</option>
+          <option class="opt-excellent" value="Master Thesis">Master Thesis</option>
+          <option class="opt-average" value="Seminar Report">Seminar Report</option>
+          <option class="opt-good" value="Research Project">Research Project</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>[1] Report type: *</label>
+        <select id="reportType" required>
+          <option value="">Select report type</option>
+          <option class="opt-average" value="Seminar Report">Seminar Report</option>
+          <option class="opt-good" value="Research-driven Thesis">Research-driven Thesis</option>
+          <option class="opt-average" value="Design-driven + Small Evaluation">Design-driven + Small Evaluation</option>
+          <option class="opt-good" value="Design-driven Thesis">Design-driven Thesis</option>
+          <option class="opt-excellent" value="ML/NLP Thesis">Machine Learning / NLP Thesis</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Report title</label>
+        <textarea id="reportTitle" maxlength="320" style="width:100%;min-height:90px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);color:#fff"></textarea>
+      </div>
+
+      <div style="display:flex;gap:12px">
+        <div style="flex:1">
+          <label>Seminar Date</label>
+          <input id="seminarDate" type="date">
+        </div>
+        <div style="width:140px">
+          <label>Seminar Time</label>
+          <input id="seminarTime" type="time">
+        </div>
+      </div>
+
+      <p class="info">ℹ️ Fields marked with * are required</p>
+      <div style="margin-top:18px">
+        <button class="btn btn-continue" onclick="submitDetails()" style="padding:14px 22px;font-size:1.1em">Continue</button>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.02);padding:14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04)">
+      <h3 style="margin-top:0">Report types</h3>
+      <ol style="color:#dbeafe;margin-top:8px">
+        <li><strong>Research-driven Theses</strong>
+          <ul style="margin-top:6px;color:#a0aec0">
+            <li>General Aspects (points 30)</li>
+            <li>Theory & Framework, Literature Review or Research Questions (points 30)</li>
+            <li>Research (points 40)</li>
+          </ul>
+        </li>
+        <li style="margin-top:8px"><strong>Design-Driven + Small Evaluation theses</strong>
+          <ul style="margin-top:6px;color:#a0aec0">
+            <li>General Aspects (points 30)</li>
+            <li>System Development (points 50)</li>
+            <li>Evaluation (points 20)</li>
+          </ul>
+        </li>
+        <li style="margin-top:8px"><strong>Design-Driven Theses</strong>
+          <ul style="margin-top:6px;color:#a0aec0">
+            <li>General Aspects (points 30)</li>
+            <li>System Development (points 70)</li>
+          </ul>
+        </li>
+        <li style="margin-top:8px"><strong>Machine Learning or NLP Based Theses</strong>
+          <ul style="margin-top:6px;color:#a0aec0">
+            <li>General Aspects (points 30)</li>
+            <li>Modeling (points 50)</li>
+            <li>Evaluation (points 20)</li>
+          </ul>
+        </li>
+        <li style="margin-top:8px"><strong>Seminar Report</strong>
+          <ul style="margin-top:6px;color:#a0aec0">
+            <li>Presentation (points 15)</li>
+            <li>Report (points 75)</li>
+            <li>Peer Activities (points 10)</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+<script type="application/json" id="current-data">{{ current|tojson|safe }}</script>
+<script>
+async function submitDetails(){
+  const payload = {
+    first_name: document.getElementById('firstName').value.trim(),
+    last_name: document.getElementById('lastName').value.trim(),
+    student_id: document.getElementById('studentId').value.trim(),
+    gender: document.getElementById('gender') ? document.getElementById('gender').value : '',
+    report: document.getElementById('report').value,
+    report_type: document.getElementById('reportType').value,
+    report_title: document.getElementById('reportTitle').value.trim(),
+    seminar_date: document.getElementById('seminarDate').value,
+    seminar_time: document.getElementById('seminarTime').value
+  };
+  if(!payload.first_name || !payload.last_name || !payload.student_id || !payload.report || !payload.report_type){
+    alert('⚠️ Please fill in all required fields.');
+    return;
+  }
+  const res = await fetch('/evaluate/start', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+  if(res.ok){
+    window.location.href = '/evaluate/grade';
+  } else {
+    alert('Error while redirecting to grading.');
+  }
+}
+// prefill with current session values if present
+const currentDataScript = document.getElementById('current-data');
+const CURRENT = currentDataScript ? JSON.parse(currentDataScript.textContent || '{}') : {};
+function createParticles(){
+  const c=document.getElementById('particles');
+  if(!c) return;
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.top=Math.random()*100+'%';
+    p.style.animationDelay=Math.random()*15+'s';
+    p.style.animationDuration=(10+Math.random()*10)+'s';
+    c.appendChild(p);
+  }
+}
+window.addEventListener('DOMContentLoaded', ()=>{
+  createParticles();
+  if(CURRENT && Object.keys(CURRENT).length){
+    if(CURRENT.first_name) document.getElementById('firstName').value = CURRENT.first_name;
+    if(CURRENT.last_name) document.getElementById('lastName').value = CURRENT.last_name;
+    if(CURRENT.student_id) document.getElementById('studentId').value = CURRENT.student_id;
+    if(CURRENT.gender && document.getElementById('gender')) document.getElementById('gender').value = CURRENT.gender;
+    if(CURRENT.report) document.getElementById('report').value = CURRENT.report;
+    if(CURRENT.report_type) document.getElementById('reportType').value = CURRENT.report_type;
+    if(CURRENT.report_title) document.getElementById('reportTitle').value = CURRENT.report_title;
+    if(CURRENT.seminar_date) document.getElementById('seminarDate').value = CURRENT.seminar_date;
+    if(CURRENT.seminar_time) document.getElementById('seminarTime').value = CURRENT.seminar_time;
+  }
+});
+</script>
+</body>
+</html> 

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🏷️ Evaluation — Rubrics</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;color:#fff;min-height:100vh}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out}
+@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}
+.container{max-width:1100px;margin:28px auto;padding:20px}
+.card{background:rgba(255,255,255,0.03);padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.05);margin-bottom:18px}
+.rubric-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.score-badge{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:6px 14px;border-radius:20px;font-weight:700}
+.select-score{width:120px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;border:1px solid rgba(255,255,255,0.06)}
+select{color:#fff !important;background-color:#1a1a3e !important}
+select option{background-color:#2a2a5e !important;color:#ffffff !important;padding:12px !important;font-weight:500 !important}
+select option:hover,select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+body.light-mode select{background-color:#ffffff !important;color:#000000 !important}
+body.light-mode select option{background-color:#ffffff !important;color:#000000 !important;font-weight:500 !important;padding:12px !important}
+body.light-mode select option:hover,body.light-mode select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+body.light-mode select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+/* Slider styles */
+.slider{width:100%;height:8px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));outline:none;-webkit-appearance:none}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#ffb703,#fb8500);box-shadow:0 4px 14px rgba(0,0,0,0.4);border:3px solid rgba(255,255,255,0.95);cursor:pointer}
+.slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#ffb703,#fb8500);box-shadow:0 4px 14px rgba(0,0,0,0.4);border:3px solid rgba(255,255,255,0.95);cursor:pointer}
+.comment-box{width:100%;padding:12px;border-radius:10px;border:2px solid rgba(102,126,234,0.3);min-height:90px;background:#1a1a3e;color:#fff;font-size:1em;transition:all 0.3s}
+.comment-box:focus{outline:none;border-color:#667eea;box-shadow:0 0 20px rgba(102,126,234,0.5)}
+/* Custom template dropdown */
+.template-dropdown{position:relative}
+.template-btn{width:100%;text-align:left;padding:12px;border-radius:10px;background:#1a1a3e;border:2px solid rgba(102,126,234,0.3);color:#fff;cursor:pointer}
+.dropdown-menu{position:absolute;left:0;right:0;top:calc(100% + 8px);background:#2a2a5e;border:1px solid rgba(255,255,255,0.05);padding:8px;border-radius:10px;max-height:260px;overflow:auto;z-index:999}
+.tpl-option{padding:12px;border-radius:8px;margin-bottom:6px;cursor:pointer;color:#fff;background:#2a2a5e}
+.tpl-option .tpl-text{color:#e6eef8;white-space:normal}
+.tpl-option.empty{background:#2a2a5e;color:#9aa4c7;font-weight:600}
+.tpl-option:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+.opt-excellent{background:linear-gradient(135deg,#10b981,#059669)}
+.opt-good{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.opt-average{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.opt-poor{background:linear-gradient(135deg,#ef4444,#dc2626)}
+/* Make comment template dropdown options match settings/report selects */
+.template-dropdown .tpl-option{background-color:#2a2a5e !important;color:#ffffff !important}
+.template-dropdown .tpl-option:hover{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+.template-dropdown .tpl-option.empty{background-color:#2a2a5e !important}
+select option.opt-excellent{background:linear-gradient(135deg,#10b981,#059669) !important;color:#fff !important}
+select option.opt-good{background:linear-gradient(135deg,#3b82f6,#2563eb) !important;color:#fff !important}
+select option.opt-average{background:linear-gradient(135deg,#f59e0b,#d97706) !important;color:#fff !important}
+select option.opt-poor{background:linear-gradient(135deg,#ef4444,#dc2626) !important;color:#fff !important}
+.btn{padding:10px 14px;border-radius:8px;border:none;cursor:pointer}
+.btn-back{background:#2d3748;color:#fff;margin-right:8px}
+.btn-generate{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<div class="container">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div>
+      <h2>🏷️ Evaluation — Rubrics</h2>
+      <div style="color:#a0aec0">Verify student details and grade the rubrics below — Using templates for: <strong>{{ current.report_type }}</strong></div>
+    </div>
+    <div>
+      <button class="btn btn-back" onclick="window.location.href='/evaluate'">← Back to Details</button>
+      <button class="btn btn-generate" id="generateBtn" onclick="generateReport()">Generate Report</button>
+    </div>
+  </div>
+
+  <div class="card row" style="align-items:center; position:sticky; top:12px; z-index:900; background:#0b1220; border-color:rgba(255,255,255,0.12); box-shadow:0 10px 30px rgba(0,0,0,0.35); padding:14px">
+    <div style="flex:1;min-width:260px;padding-right:10px">
+      <div style="color:#a0aec0;font-size:0.85em">Student data</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+        <input id="display-firstName" type="text" placeholder="First name" style="padding:8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);color:#fff;min-width:140px" value="{{ current.first_name }}">
+        <input id="display-lastName" type="text" placeholder="Last name" style="padding:8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);color:#fff;min-width:140px" value="{{ current.last_name }}">
+        <input id="display-studentId" type="text" placeholder="Matriculation" style="padding:8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);color:#fff;width:120px" value="{{ current.student_id }}">
+      </div>
+    </div>
+    <div style="flex:1;min-width:320px;padding-left:10px">
+      <div style="color:#a0aec0;font-size:0.85em">Report</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+        <select id="display-reportType" onchange="onReportTypeChange()" style="padding:8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);color:#fff;min-width:220px">
+          <option value="">Select report type</option>
+          <option class="opt-excellent" value="Seminar Report" {{ 'selected' if current.report_type=='Seminar Report' else '' }}>Seminar Report</option>
+          <option class="opt-good" value="Research-driven Thesis" {{ 'selected' if current.report_type=='Research-driven Thesis' else '' }}>Research-driven Thesis</option>
+          <option class="opt-average" value="Design-driven + Small Evaluation" {{ 'selected' if current.report_type=='Design-driven + Small Evaluation' else '' }}>Design-driven + Small Evaluation</option>
+          <option class="opt-good" value="Design-driven Thesis" {{ 'selected' if current.report_type=='Design-driven Thesis' else '' }}>Design-driven Thesis</option>
+          <option class="opt-poor" value="Machine Learning / NLP Thesis" {{ 'selected' if current.report_type=='Machine Learning / NLP Thesis' else '' }}>Machine Learning / NLP Thesis</option>
+        </select>
+        <input id="display-reportTitle" type="text" placeholder="Report title" style="padding:8px;border-radius:6px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);color:#fff;flex:1" value="{{ current.report_title }}">
+        <input id="display-report" type="hidden" value="{{ current.report }}">
+      </div>
+    </div>
+    <div style="flex:1;text-align:right;display:flex;gap:8px;justify-content:flex-end;align-items:center">
+      <button class="btn btn-back" onclick="resetDetails()" style="background:#2d3748;color:#fff">Reset</button>
+      <button class="btn btn-continue" onclick="saveEditedDetails()">Save</button>
+    </div>
+  </div>
+
+  <div id="rubricsContainer" class="card" style="margin-top:12px"></div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h3>Summary</h3>
+        <div style="color:#a0aec0">Total score: <span id="totalScore">0</span> — Percentage: <span id="percentage">0%</span> — Grade: <span id="grade">—</span></div>
+      </div>
+      <div style="text-align:right"><small style="color:#a0aec0">Quick templates and finalise the grading when ready.</small></div>
+    </div>
+  </div>
+
+  <!-- floating summary always visible -->
+  <div id="floatingSummary" style="position:fixed;right:20px;top:20px;background:linear-gradient(135deg,#0f172a,#0b1220);color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.35);z-index:2000;min-width:140px;text-align:center">
+    <div style="font-size:0.9em;opacity:0.9">Current</div>
+    <div style="font-weight:800;font-size:1.1em;margin-top:6px">Total: <span id="floatTotal">0</span></div>
+    <div style="margin-top:6px">Pct: <span id="floatPercentage">0%</span> • Grade: <span id="floatGrade">—</span></div>
+  </div>
+
+  <div style="max-width:1100px;margin:0 auto;padding:20px 0;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <button onclick="quickFill('excellent')" style="padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">⭐ Quick Fill: Excellent</button>
+      <button onclick="quickFill('good')" style="padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">👍 Quick Fill: Good</button>
+      <button onclick="quickFill('average')" style="padding:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">📊 Quick Fill: Average</button>
+    </div>
+
+    <div style="text-align:center;margin-top:8px">
+      <button id="finalGenerate" class="btn-generate" onclick="generateReport()" style="width:100%;padding:18px;border-radius:12px;font-size:1.2em">🎉 Generate PDF Report</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const RUBRICS = {{ rubrics | default({}) | tojson | safe }};
+const COMMENT_TEMPLATES = {{ comment_templates | default({}) | tojson | safe }};
+const GROUPS = {{ groups | default({}) | tojson | safe }};
+let scores = {};
+let comments = {};
+let totalOverride = null; // numeric override for overall total
+let lastSoundAt = 0;
+
+
+function initializeRubrics(){
+  const container = document.getElementById('rubricsContainer');
+  container.innerHTML = '';
+  // For each group (Presentation / Report) render a section with its categories
+  for(const [group, cats] of Object.entries(GROUPS)){
+    const gid = group.replace(/\s+/g,'_');
+    const groupCard = document.createElement('div'); groupCard.style.marginBottom = '18px'; groupCard.style.padding = '12px'; groupCard.style.border = '1px solid rgba(255,255,255,0.03)'; groupCard.style.borderRadius = '10px';
+    const header = document.createElement('div'); header.style.display = 'flex'; header.style.justifyContent = 'space-between'; header.style.alignItems = 'center'; header.style.marginBottom = '12px';
+    header.innerHTML = `<div style="font-weight:800;font-size:1.05em">${group}</div><div style="color:#a0aec0">Subtotal: <strong><span id="group-${gid}-score">0</span> / <span id="group-${gid}-max">0</span></strong> — <span id="group-${gid}-percent">0%</span></div>`;
+    groupCard.appendChild(header);
+
+    // compute group max
+    let groupMax = 0;
+    cats.forEach(cat=>{ const m = RUBRICS[cat]; if(m && m.max_points) groupMax += m.max_points; });
+    const maxEl = groupCard.querySelector(`#group-${gid}-max`);
+    if(maxEl) maxEl.textContent = groupMax;
+
+    // container for categories in this group
+    const groupContent = document.createElement('div');
+    for(const cat of cats){
+      const meta = RUBRICS[cat];
+      if(!meta) continue;
+      const box = document.createElement('div');
+      box.style.marginBottom = '18px';
+      box.innerHTML = `<div class="rubric-header"><div style="font-weight:700">${cat}</div><div class="score-badge" id="badge-${cat}">0 / ${meta.max_points}</div></div>`;
+
+      const scoreDiv = document.createElement('div'); scoreDiv.style.margin = '18px 0'; scoreDiv.style.display='flex'; scoreDiv.style.alignItems='center'; scoreDiv.style.gap='8px';
+      const minusBtn = document.createElement('button'); minusBtn.className = 'btn'; minusBtn.style.width = '36px'; minusBtn.style.height = '36px'; minusBtn.textContent = '-';
+      const numInput = document.createElement('input'); numInput.type = 'text'; numInput.id = `input-${cat}`; numInput.value = 0; numInput.style.width = '64px'; numInput.style.padding = '8px'; numInput.style.borderRadius='6px'; numInput.style.textAlign='center';
+      const plusBtn = document.createElement('button'); plusBtn.className = 'btn'; plusBtn.style.width='36px'; plusBtn.style.height='36px'; plusBtn.textContent = '+';
+      const valSpan = document.createElement('span'); valSpan.id = `value-${cat}`; valSpan.style.fontWeight = '700'; valSpan.style.color = '#fff'; valSpan.textContent = `0 / ${meta.max_points}`;
+      const err = document.createElement('div'); err.id = `err-${cat}`; err.style.color = '#ff6b6b'; err.style.fontSize = '0.85em'; err.style.marginLeft = '8px'; err.style.display='none';
+
+      minusBtn.onclick = ()=>{ const cur = validateForStep(document.getElementById(`input-${cat}`).value); if(cur === null) return; const next = Math.max(0, cur - 1); document.getElementById(`input-${cat}`).value = formatScore(next); document.getElementById(`input-${cat}`).dispatchEvent(new Event('input')); };
+      plusBtn.onclick = ()=>{ const cur = validateForStep(document.getElementById(`input-${cat}`).value); if(cur === null) return; const next = Math.min(meta.max_points || 0, cur + 1); document.getElementById(`input-${cat}`).value = formatScore(next); document.getElementById(`input-${cat}`).dispatchEvent(new Event('input')); };
+      numInput.addEventListener('input', ()=>{ const v = validateAndClamp(document.getElementById(`input-${cat}`).value, meta.max_points); if(v === null){ err.style.display='block'; err.textContent='Only positive integers or .5 increments allowed'; } else { err.style.display='none'; updateScore(cat, v, meta.max_points); valSpan.textContent = `${formatScore(v)} / ${meta.max_points}`; } });
+
+      scoreDiv.appendChild(minusBtn); scoreDiv.appendChild(numInput); scoreDiv.appendChild(plusBtn); scoreDiv.appendChild(valSpan); scoreDiv.appendChild(err); box.appendChild(scoreDiv);
+
+      const criteriaDiv = document.createElement('div'); criteriaDiv.style.background = 'rgba(255,255,255,0.03)'; criteriaDiv.style.padding = '12px'; criteriaDiv.style.borderRadius = '8px'; criteriaDiv.style.marginTop = '8px';
+      meta.criteria.forEach(c => { const p = document.createElement('div'); p.style.padding = '6px 0'; p.style.color = '#a0aec0'; p.innerHTML = `<strong>${c.range} points</strong> — ${c.description}`; criteriaDiv.appendChild(p); });
+      box.appendChild(criteriaDiv);
+
+      const tmplDiv = document.createElement('div'); tmplDiv.style.marginTop = '12px'; tmplDiv.innerHTML = `<label style="display:block;margin-bottom:8px;color:#a0aec0;font-weight:600">Templates</label>`;
+      const dropdown = document.createElement('div'); dropdown.className = 'template-dropdown'; dropdown.id = `template-${cat}`;
+      const btn = document.createElement('button'); btn.className = 'template-btn'; btn.textContent = '-- Choose template --';
+      const menu = document.createElement('div'); menu.className = 'dropdown-menu'; menu.style.display = 'none';
+      menu.innerHTML = '<div class="tpl-option empty" data-index="">-- Choose template --</div>';
+      (COMMENT_TEMPLATES[cat]||[]).forEach((t,i)=>{ const o = document.createElement('div');
+        o.className = 'tpl-option';
+        o.dataset.index = i;
+        o.dataset.score = t.score;
+        o.innerHTML = `<div style="font-weight:700">${t.score} points</div><div class="tpl-text" style="margin-top:6px">${t.template||t.text||''}</div>`;
+        menu.appendChild(o);
+      });
+      dropdown.appendChild(btn); dropdown.appendChild(menu); tmplDiv.appendChild(dropdown); box.appendChild(tmplDiv);
+      btn.addEventListener('click',(e)=>{ e.stopPropagation(); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; });
+      menu.addEventListener('click',(e)=>{ const opt = e.target.closest('.tpl-option'); if(!opt || opt.classList.contains('empty')) return; const idx = opt.dataset.index; const t = (COMMENT_TEMPLATES[cat]||[])[idx]; if(t){ const inputEl = document.getElementById(`input-${cat}`); if(inputEl){ inputEl.value = formatScore(t.score); inputEl.dispatchEvent(new Event('input')); } const cm = document.getElementById(`comment-${cat}`); if(cm) cm.value = t.template || t.text || ''; } menu.style.display = 'none'; });
+      if(!window.__tplDocListenerAdded){ document.addEventListener('click', ()=>{ document.querySelectorAll('.dropdown-menu').forEach(m=>m.style.display='none'); }); window.__tplDocListenerAdded = true; }
+
+      const cmDiv = document.createElement('div'); cmDiv.style.marginTop = '12px';
+      cmDiv.innerHTML = `<label style="display:block;margin-bottom:8px;color:#a0aec0;font-weight:600">Comment <small style="color:#a0aec0">[max 2750 characters]</small></label><textarea id="comment-${cat}" class="comment-box" placeholder="Comment..." maxlength="2750"></textarea><div style="text-align:right;color:#a0aec0;margin-top:6px"><small id="counter-${cat}">0 / 2750</small></div>`;
+      box.appendChild(cmDiv);
+      const ta = cmDiv.querySelector('textarea'); if(ta){ ta.addEventListener('input', ()=>{ const c = document.getElementById(`counter-${cat}`); if(c) c.textContent = `${ta.value.length} / 2750`; playScoreSound(); }); }
+
+      groupContent.appendChild(box);
+      scores[cat] = 0; comments[cat] = '';
+    }
+
+    groupCard.appendChild(groupContent);
+    container.appendChild(groupCard);
+  }
+  updateSummary();
+}
+
+function updateScore(category, value, maxPoints){
+  scores[category] = Number(value);
+  const b = document.getElementById(`badge-${category}`); if(b) b.textContent = `${value} / ${maxPoints}`;
+  playScoreSound();
+  updateSummary();
+}
+
+function updateSummary(){
+  let total = 0; let maxTotal = 0;
+  // compute per-group subtotals and totals
+  for(const [group, cats] of Object.entries(GROUPS)){
+    let gtotal = 0; let gmax = 0;
+    for(const cat of cats){
+      const val = Number(scores[cat] || 0);
+      const meta = RUBRICS[cat] || {};
+      gtotal += val;
+      gmax += meta.max_points || 0;
+    }
+    total += gtotal; maxTotal += gmax;
+    const gid = group.replace(/\s+/g,'_');
+    const groupScoreEl = document.getElementById(`group-${gid}-score`);
+    const groupPercentEl = document.getElementById(`group-${gid}-percent`);
+    if(groupScoreEl) groupScoreEl.innerHTML = `<strong>${gtotal} / ${gmax}</strong>`;
+    if(groupPercentEl) groupPercentEl.textContent = (gmax ? Math.round((gtotal/gmax)*100) : 0) + '%';
+  }
+
+  const effectiveTotal = (totalOverride !== null) ? Number(totalOverride) : total;
+  const percent = maxTotal ? Math.round((effectiveTotal / maxTotal) * 100) : 0;
+  document.getElementById('totalScore').textContent = (totalOverride !== null) ? `${effectiveTotal} (ovr)` : total;
+  document.getElementById('percentage').textContent = percent + '%';
+  let grade = '—'; if(percent>=90) grade='1.0'; else if(percent>=80) grade='1.7'; else if(percent>=70) grade='2.3'; else if(percent>=60) grade='3.0'; else if(percent>=50) grade='4.0'; else grade='5.0';
+  document.getElementById('grade').textContent = grade;
+  // update floating summary
+  const fTotal = document.getElementById('floatTotal'); if(fTotal) fTotal.textContent = (totalOverride !== null) ? `${effectiveTotal} (ovr)` : total;
+  const fPct = document.getElementById('floatPercentage'); if(fPct) fPct.textContent = percent + '%';
+  const fGrade = document.getElementById('floatGrade'); if(fGrade) fGrade.textContent = grade;
+}
+
+function collectEvaluation(){
+  // prefer live inputs, then edited cache, then server-provided defaults
+  const edited = window.CURRENT_EDIT || {};
+  function getInputValue(id, fallback){
+    const el = document.getElementById(id);
+    if(!el) return fallback;
+    const val = (el.value || '').trim();
+    return val || fallback;
+  }
+  const student = {
+    firstName: getInputValue('display-firstName', edited.first_name || `{{ current.first_name }}`),
+    lastName: getInputValue('display-lastName', edited.last_name || `{{ current.last_name }}`),
+    studentId: getInputValue('display-studentId', edited.student_id || `{{ current.student_id }}`),
+    gender: edited.gender || `{{ current.gender }}`,
+    reportType: getInputValue('display-reportType', edited.report_type || `{{ current.report_type }}`),
+    reportTitle: getInputValue('display-reportTitle', edited.report_title || `{{ current.report_title }}`),
+    seminarDate: edited.seminar_date || `{{ current.seminar_date }}`,
+    seminarTime: edited.seminar_time || `{{ current.seminar_time }}`
+  };
+  const scoresPayload = {};
+  for(const [cat, meta] of Object.entries(RUBRICS)){
+    const points = Number(scores[cat] || 0);
+    const comment = (document.getElementById(`comment-${cat}`) || {}).value || '';
+    const title = cat;
+    scoresPayload[cat] = [{ title, points, max_points: meta.max_points || 0, comment }];
+  }
+
+  // compute group subtotals (respect overrides)
+  const groupTotals = {};
+  for(const [group, cats] of Object.entries(GROUPS)){
+    let gsum = 0;
+    for(const cat of cats){ gsum += Number(scores[cat] || 0); }
+    groupTotals[group] = gsum;
+  }
+
+  const total = (totalOverride !== null) ? Number(totalOverride) : Object.values(groupTotals).reduce((a,b)=>a+b,0);
+  const percentage = document.getElementById('percentage').textContent.replace('%','') || '0';
+  // build comments map (category -> array of detail objects)
+  const commentsMap = {};
+  for(const [k, v] of Object.entries(scoresPayload)){
+    commentsMap[k] = v; // keep the detailed objects (with comment)
+  }
+  return Object.assign({
+    first_name: student.firstName,
+    last_name: student.lastName,
+    student_id: student.studentId,
+    gender: student.gender,
+    report: edited.report || `{{ current.report }}`,
+    report_type: student.reportType,
+    report_title: student.reportTitle,
+    seminar_date: student.seminarDate,
+    seminar_time: student.seminarTime,
+    scores: scoresPayload,
+    comments: commentsMap,
+    total_score: total,
+    percentage,
+    group_totals: groupTotals,
+    total_override: totalOverride
+  });
+} 
+
+// group subtotals are read-only (no edit functions)
+
+
+async function generateReport(){
+  const payload = collectEvaluation();
+  // visual rewards
+  const maxTotal = Object.values(RUBRICS).reduce((a,b)=>a + (b.max_points||0),0);
+  const pct = maxTotal ? Math.round((Number(payload.total_score) / maxTotal) * 100) : 0;
+  createConfetti();
+  if(pct >= 90){ createEmojiRain('🎉'); }
+  else if(pct >= 70){ createEmojiRain('🚀'); }
+  else { createEmojiRain('💪'); }
+
+  const resp = await fetch('/generate_report', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  });
+  if(resp.ok){
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'report.pdf'; document.body.appendChild(a); a.click(); a.remove();
+    // clear session and show achievement
+    await fetch('/evaluate/clear_session', {method:'POST'});
+    showAchievement('🎉 Success!', 'PDF Report generated successfully!');
+    setTimeout(()=> window.location.href = '/evaluate', 900);
+  } else {
+    alert('Failed to generate report');
+  }
+}
+
+// helpers
+// helpers for stepper: allows integers or .5 increments
+function validateAndClamp(raw, max){ if(raw === null || raw === undefined) return null; const s = String(raw).trim(); const m = s.match(/^(\d+)(?:\.(5))?$/); if(!m) return null; let v = parseInt(m[1],10); if(m[2]) v += 0.5; if(max !== undefined && v > max) return max; return v; }
+function validateForStep(raw){ const v = validateAndClamp(raw); return v; }
+function formatScore(v){ if(v === null || v === undefined) return '0'; if(Number.isInteger(v)) return String(v); return String((Math.round(v*2)/2).toFixed(1)); }
+
+function playSound(type){ try{ const ctx = new (window.AudioContext || window.webkitAudioContext)(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); if(type === 'click'){ osc.frequency.value = 800; gain.gain.value = 0.1; osc.start(); osc.stop(ctx.currentTime + 0.1); } else if(type === 'success'){ osc.frequency.value = 1200; gain.gain.value = 0.2; osc.start(); osc.stop(ctx.currentTime + 0.2); } }catch(e){ /* ignore audio errors */ }
+}
+
+function playScoreSound(){
+  const now = Date.now();
+  if(now - lastSoundAt < 300) return;
+  lastSoundAt = now;
+  playSound('click');
+}
+
+function showAchievement(title, text){ const ach = document.createElement('div'); ach.style.position='fixed'; ach.style.right='20px'; ach.style.top='20px'; ach.style.background='linear-gradient(135deg,#667eea,#764ba2)'; ach.style.color='#fff'; ach.style.padding='12px 16px'; ach.style.borderRadius='10px'; ach.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)'; ach.style.zIndex=9999; ach.innerHTML = `<strong>${title}</strong><div style="opacity:.9;margin-top:4px">${text}</div>`; document.body.appendChild(ach); setTimeout(()=> ach.remove(), 2500); }
+
+function createConfetti(){ for(let i=0;i<60;i++){ setTimeout(()=>{ const c=document.createElement('div'); c.style.position='fixed'; c.style.left=Math.random()*100+'%'; c.style.top='-10px'; c.style.width='10px'; c.style.height='10px'; c.style.background=`hsl(${Math.random()*360},100%,50%)`; c.style.borderRadius='2px'; c.style.zIndex=9998; c.style.opacity='0.9'; c.style.transition='transform 3s linear, top 3s linear'; document.body.appendChild(c); setTimeout(()=>{ c.style.top='110%'; c.style.transform=`rotate(${Math.random()*360}deg)`; },10); setTimeout(()=> c.remove(),3500); }, i*20); } }
+
+function createEmojiRain(emoji){ for(let i=0;i<20;i++){ setTimeout(()=>{ const e=document.createElement('div'); e.textContent=emoji; e.style.position='fixed'; e.style.left=Math.random()*100+'%'; e.style.top='-30px'; e.style.fontSize='20px'; e.style.zIndex=9998; document.body.appendChild(e); setTimeout(()=> e.remove(),3000); }, i*120); } }
+
+function quickFill(level){
+  const percentages = {'excellent':0.95, 'good':0.8, 'average':0.7};
+  const pct = percentages[level] || 0.7;
+  for(const [cat, meta] of Object.entries(RUBRICS)){
+    // default numeric value based on percentage of max
+    let value = Math.round((meta.max_points || 0) * pct);
+
+    // pick a comment template appropriate for the level (best/mid/worst)
+    const templates = (COMMENT_TEMPLATES[cat] || []).slice();
+    if(templates.length){
+      // sort templates by score desc
+      templates.sort((a,b)=> (b.score||0) - (a.score||0));
+      let idx = 0;
+      if(level === 'excellent') idx = 0;
+      else if(level === 'good') idx = Math.min(1, templates.length-1);
+      else idx = templates.length-1;
+      const t = templates[idx];
+      if(t && (t.score !== undefined && t.score !== null)){
+        value = Number(t.score);
+      }
+      const commentEl = document.getElementById(`comment-${cat}`);
+      if(commentEl) commentEl.value = t.template || t.text || '';
+    }
+
+    const inputEl = document.getElementById(`input-${cat}`);
+    if(inputEl){
+      inputEl.value = formatScore(value);
+      inputEl.dispatchEvent(new Event('input'));
+    }
+  }
+  showAchievement('⚡ Quick Fill!', `All scores set to ${level} level`);
+}
+
+function toggleEditDetails(){
+  // legacy stub kept for compatibility: focus first input
+  const f = document.getElementById('display-firstName'); if(f) f.focus();
+}
+
+async function saveEditedDetails(){
+  const payload = {
+    first_name: document.getElementById('display-firstName').value.trim(),
+    last_name: document.getElementById('display-lastName').value.trim(),
+    student_id: document.getElementById('display-studentId').value.trim(),
+    report_title: document.getElementById('display-reportTitle').value.trim(),
+    report_type: document.getElementById('display-reportType').value || `{{ current.report_type }}`,
+    report: document.getElementById('display-report').value || `{{ current.report }}`,
+    gender: `{{ current.gender }}`,
+    seminar_date: `{{ current.seminar_date }}`,
+    seminar_time: `{{ current.seminar_time }}`
+  };
+  if(!payload.first_name || !payload.last_name || !payload.student_id){ alert('Please fill required fields'); return; }
+  const res = await fetch('/evaluate/start', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+  if(res.ok){
+    // update in-memory and visible fields
+    window.CURRENT_EDIT = payload;
+    // update display text if any spans present
+    const dispSpan = document.getElementById('displayStudent'); if(dispSpan) dispSpan.textContent = payload.first_name + ' ' + payload.last_name;
+    const dispId = document.getElementById('displayId'); if(dispId) dispId.textContent = payload.student_id;
+    // persist fields remain in inputs already
+    showAchievement('✏️ Updated', 'Details updated successfully');
+    saveEvaluationToMemory();
+  } else {
+    alert('Failed to update details');
+  }
+}
+
+async function onReportTypeChange(){
+  const payload = {
+    first_name: document.getElementById('display-firstName').value.trim(),
+    last_name: document.getElementById('display-lastName').value.trim(),
+    student_id: document.getElementById('display-studentId').value.trim(),
+    report_title: document.getElementById('display-reportTitle').value.trim(),
+    report_type: document.getElementById('display-reportType').value || `{{ current.report_type }}`,
+    report: document.getElementById('display-report').value || `{{ current.report }}`,
+    gender: `{{ current.gender }}`,
+    seminar_date: `{{ current.seminar_date }}`,
+    seminar_time: `{{ current.seminar_time }}`
+  };
+  if(!payload.first_name || !payload.last_name || !payload.student_id){ return; }
+  const res = await fetch('/evaluate/start', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+  if(res.ok){
+    window.location.href = '/evaluate/grade';
+  } else {
+    alert('Failed to update report type');
+  }
+}
+
+async function saveEvaluationToMemory(){
+  const payload = collectEvaluation();
+  const res = await fetch('/evaluate/save', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+  if(res.ok){
+    showAchievement('💾 Saved', 'Evaluation saved to students list');
+  } else {
+    alert('Failed to save evaluation');
+  }
+}
+
+async function resetDetails(){
+  try{
+    const resp = await fetch('/evaluate/current');
+    if(!resp.ok){ showAchievement('⚠️ Error', 'Could not fetch current details'); return; }
+    const data = await resp.json();
+
+    // Reset top fields
+    document.getElementById('display-firstName').value = data.first_name || '';
+    document.getElementById('display-lastName').value = data.last_name || '';
+    document.getElementById('display-studentId').value = data.student_id || '';
+    document.getElementById('display-reportTitle').value = data.report_title || '';
+    document.getElementById('display-reportType').value = data.report_type || '';
+    const reportEl = document.getElementById('display-report');
+    if(reportEl) reportEl.value = data.report || '';
+
+    // also update visible spans if present
+    const ds = document.getElementById('displayStudent'); if(ds) ds.textContent = (data.first_name||'') + ' ' + (data.last_name||'');
+    const idEl = document.getElementById('displayId'); if(idEl) idEl.textContent = data.student_id || '';
+
+    // Reset rubrics: scores, templates and comments
+    for(const [cat, meta] of Object.entries(RUBRICS)){
+      // restore score from session if available, otherwise 0
+      let scoreVal = 0;
+      if(data.scores && data.scores[cat] !== undefined){
+        const s = data.scores[cat];
+        if(Array.isArray(s)){
+          scoreVal = Number(s[0].points || s[0].score || 0) || 0;
+        } else { scoreVal = Number(s) || 0; }
+      }
+      const inputEl = document.getElementById(`input-${cat}`);
+      if(inputEl){ inputEl.value = formatScore(scoreVal); inputEl.dispatchEvent(new Event('input')); }
+
+      // reset template select
+      const tmpl = document.getElementById(`template-${cat}`);
+      if(tmpl) tmpl.value = '';
+
+      // restore comment from session if available
+      const cm = document.getElementById(`comment-${cat}`);
+      if(cm){
+        let cval = '';
+        if(data.comments && data.comments[cat]){
+          const raw = data.comments[cat];
+          if(Array.isArray(raw)){
+            cval = raw[0].comment || raw[0].text || String(raw[0]) || '';
+          } else {
+            cval = String(raw || '');
+          }
+        }
+        cm.value = cval;
+        const counter = document.getElementById(`counter-${cat}`); if(counter) counter.textContent = `${cm.value.length} / 2750`;
+      }
+    }
+
+    updateSummary();
+    showAchievement('🔄 Reset', 'Details and rubrics reset to latest session values');
+  }catch(e){ console.error(e); alert('An error occurred while resetting details'); }
+}
+
+// init
+function createParticles(){
+  const c=document.getElementById('particles');
+  if(!c) return;
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.top=Math.random()*100+'%';
+    p.style.animationDelay=Math.random()*15+'s';
+    p.style.animationDuration=(10+Math.random()*10)+'s';
+    c.appendChild(p);
+  }
+}
+window.addEventListener('DOMContentLoaded', ()=>{ createParticles(); initializeRubrics(); });
+</script>
+</body>
+</html>

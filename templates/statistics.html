@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📊 Statistics</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;min-height:100vh}#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out}@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}.navbar{position:relative;z-index:2;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)}.navbar h1{color:#fff;font-size:1.5em}.btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s}.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(102,126,234,0.4)}.container{position:relative;z-index:2;max-width:1400px;margin:40px auto;padding:20px}.header{text-align:center;color:#fff;margin-bottom:40px}.header h2{font-size:2.5em;margin-bottom:10px}.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:30px}.chart-card{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:30px;transition:all 0.3s}.chart-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(102,126,234,0.3)}.chart-title{color:#fff;font-size:1.3em;margin-bottom:20px;text-align:center}.bar-chart{display:flex;align-items:flex-end;justify-content:space-around;height:250px;gap:15px}.bar{flex:1;background:linear-gradient(180deg,#667eea,#764ba2);border-radius:10px 10px 0 0;position:relative;transition:all 0.3s;cursor:pointer}.bar:hover{transform:scaleY(1.05);box-shadow:0 -5px 20px rgba(102,126,234,0.5)}.bar-label{position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);color:#a0aec0;font-size:0.85em;white-space:nowrap}.bar-value{position:absolute;top:-25px;left:50%;transform:translateX(-50%);color:#fff;font-weight:bold;font-size:0.9em}.pie-chart{width:250px;height:250px;margin:0 auto;position:relative}.pie-slice{position:absolute;width:100%;height:100%;border-radius:50%;clip-path:polygon(50% 50%,50% 0%,100% 0%,100% 100%,0% 100%,0% 0%,50% 0%)}.legend{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;margin-top:30px}.legend-item{display:flex;align-items:center;gap:8px;color:#a0aec0;font-size:0.9em}.legend-color{width:20px;height:20px;border-radius:5px}.no-data{text-align:center;padding:60px;color:#a0aec0;font-size:1.2em}@media(max-width:768px){.charts-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<nav class="navbar">
+<h1>📊 Statistics & Analytics</h1>
+<a href="/dashboard" class="btn">← Dashboard</a>
+</nav>
+<div class="container">
+<div class="header">
+<h2>📈 Evaluation Statistics</h2>
+<p style="color:#a0aec0">Visual analytics and insights</p>
+</div>
+{% if students %}
+<div class="charts-grid">
+<div class="chart-card">
+<div class="chart-title">🎯 Grade Distribution</div>
+<div class="bar-chart">
+<div class="bar" style="height:{{(students|selectattr('percentage','ge',90)|list|length / students|length * 100)|int}}%">
+<div class="bar-value">{{students|selectattr('percentage','ge',90)|list|length}}</div>
+<div class="bar-label">Excellent</div>
+</div>
+<div class="bar" style="height:{{(students|selectattr('percentage','ge',80)|selectattr('percentage','lt',90)|list|length / students|length * 100)|int}}%">
+<div class="bar-value">{{students|selectattr('percentage','ge',80)|selectattr('percentage','lt',90)|list|length}}</div>
+<div class="bar-label">Very Good</div>
+</div>
+<div class="bar" style="height:{{(students|selectattr('percentage','ge',70)|selectattr('percentage','lt',80)|list|length / students|length * 100)|int}}%">
+<div class="bar-value">{{students|selectattr('percentage','ge',70)|selectattr('percentage','lt',80)|list|length}}</div>
+<div class="bar-label">Good</div>
+</div>
+<div class="bar" style="height:{{(students|selectattr('percentage','ge',60)|selectattr('percentage','lt',70)|list|length / students|length * 100)|int}}%">
+<div class="bar-value">{{students|selectattr('percentage','ge',60)|selectattr('percentage','lt',70)|list|length}}</div>
+<div class="bar-label">Satisfactory</div>
+</div>
+<div class="bar" style="height:{{(students|selectattr('percentage','lt',60)|list|length / students|length * 100)|int}}%">
+<div class="bar-value">{{students|selectattr('percentage','lt',60)|list|length}}</div>
+<div class="bar-label">Fail</div>
+</div>
+</div>
+</div>
+<div class="chart-card">
+<div class="chart-title">👥 Gender Distribution</div>
+<div class="bar-chart">
+<div class="bar" style="height:{{(students|selectattr('gender','equalto','Male')|list|length / students|length * 100)|int}}%;background:linear-gradient(180deg,#3b82f6,#2563eb)">
+<div class="bar-value">{{students|selectattr('gender','equalto','Male')|list|length}}</div>
+<div class="bar-label">Male</div>
+</div>
+<div class="bar" style="height:{{(students|selectattr('gender','equalto','Female')|list|length / students|length * 100)|int}}%;background:linear-gradient(180deg,#ec4899,#db2777)">
+<div class="bar-value">{{students|selectattr('gender','equalto','Female')|list|length}}</div>
+<div class="bar-label">Female</div>
+</div>
+<div class="bar" style="height:{{(students|selectattr('gender','equalto','Other')|list|length / students|length * 100)|int}}%;background:linear-gradient(180deg,#8b5cf6,#7c3aed)">
+<div class="bar-value">{{students|selectattr('gender','equalto','Other')|list|length}}</div>
+<div class="bar-label">Other</div>
+</div>
+</div>
+</div>
+<div class="chart-card" style="grid-column:1/-1">
+<div class="chart-title">📚 Subject Performance</div>
+<div class="bar-chart" style="height:300px">
+{% for subject in ['Computer Science','Software Engineering','Data Science','AI & Machine Learning','Web Development','Mobile Development'] %}
+{% set subj_students = students|selectattr('subject','equalto',subject)|list %}
+{% if subj_students %}
+<div class="bar" style="height:{{(subj_students|map(attribute='percentage')|sum / subj_students|length)|int}}%">
+<div class="bar-value">{{(subj_students|map(attribute='percentage')|sum / subj_students|length)|round(1)}}%</div>
+<div class="bar-label">{{subject}}</div>
+</div>
+{% endif %}
+{% endfor %}
+</div>
+</div>
+</div>
+{% else %}
+<div class="chart-card">
+<div class="no-data">📊 No data available yet. Start evaluating students to see statistics!</div>
+</div>
+{% endif %}
+</div>
+<script>
+function createParticles(){const c=document.getElementById('particles');for(let i=0;i<50;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.animationDelay=Math.random()*15+'s';p.style.animationDuration=(10+Math.random()*10)+'s';c.appendChild(p)}}window.onload=createParticles;
+</script>
+</body>
+</html>

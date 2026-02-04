@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>⚙️ Settings</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;min-height:100vh}#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out}@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}.navbar{position:relative;z-index:2;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)}.navbar h1{color:#fff;font-size:1.5em}.btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s}.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(102,126,234,0.4)}.container{position:relative;z-index:2;max-width:1000px;margin:40px auto;padding:20px}.header{text-align:center;color:#fff;margin-bottom:40px}.header h2{font-size:2.5em;margin-bottom:10px}.settings-grid{display:grid;gap:25px}.setting-card{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:30px;transition:all 0.3s}.setting-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(102,126,234,0.3)}.setting-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.setting-title{color:#fff;font-size:1.3em;display:flex;align-items:center;gap:10px}.setting-desc{color:#a0aec0;font-size:0.95em;line-height:1.6;margin-bottom:20px}.toggle{position:relative;width:60px;height:30px;background:rgba(255,255,255,0.1);border-radius:15px;cursor:pointer;transition:all 0.3s}.toggle.active{background:linear-gradient(135deg,#667eea,#764ba2)}.toggle-circle{position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:all 0.3s}.toggle.active .toggle-circle{left:33px}.input-group{margin-top:15px}.input-group label{display:block;color:#a0aec0;margin-bottom:8px;font-size:0.9em}.input-group input,.input-group select{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s}.input-group input:focus,.input-group select:focus{outline:none;border-color:#667eea;box-shadow:0 0 20px rgba(102,126,234,0.5)}.btn-save{width:100%;padding:15px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:1.1em;font-weight:bold;cursor:pointer;transition:all 0.3s;margin-top:30px}.btn-save:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(102,126,234,0.4)}
+body.light-mode{background:#f7f8ff;color:#0b1220}body.light-mode .navbar{background:rgba(255,255,255,0.85);border-bottom:1px solid rgba(15,23,42,0.1)}body.light-mode .navbar h1{color:#0b1220}body.light-mode .header{color:#0b1220}body.light-mode .setting-card{background:rgba(255,255,255,0.85);border:1px solid rgba(15,23,42,0.08)}body.light-mode .setting-title{color:#0b1220}body.light-mode .setting-desc{color:#374151}body.light-mode .input-group label{color:#475569}body.light-mode .input-group input,body.light-mode .input-group select{background:#fff;color:#0b1220;border:2px solid rgba(15,23,42,0.15)}body.light-mode .toggle{background:rgba(15,23,42,0.1)}body.light-mode #particles .particle{background:rgba(102,126,234,0.25)}
+select{color:#fff !important;background-color:#1a1a3e !important}select option{background-color:#2a2a5e !important;color:#ffffff !important;padding:12px !important;font-weight:500 !important}select option:hover,select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}body.light-mode select{background-color:#ffffff !important;color:#000000 !important}body.light-mode select option{background-color:#ffffff !important;color:#000000 !important;font-weight:500 !important;padding:12px !important}body.light-mode select option:hover,body.light-mode select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}body.light-mode select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+.opt-excellent, select option.opt-excellent{background:linear-gradient(135deg,#10b981,#059669) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+.opt-good, select option.opt-good{background:linear-gradient(135deg,#3b82f6,#2563eb) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+.opt-average, select option.opt-average{background:linear-gradient(135deg,#f59e0b,#d97706) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+.opt-poor, select option.opt-poor{background:linear-gradient(135deg,#ef4444,#dc2626) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<nav class="navbar">
+<h1>⚙️ Settings & Preferences</h1>
+<a href="/dashboard" class="btn">← Dashboard</a>
+</nav>
+<div class="container">
+<div class="header">
+<h2>⚙️ System Settings</h2>
+<p style="color:#a0aec0">Customize your evaluation experience</p>
+</div>
+<div class="settings-grid">
+<div class="setting-card">
+<div class="setting-header">
+<div class="setting-title">🔊 Sound Effects</div>
+<div class="toggle active" onclick="toggleSetting(this)">
+<div class="toggle-circle"></div>
+</div>
+</div>
+<div class="setting-desc">Enable or disable sound effects during evaluations (click sounds, success sounds, etc.)</div>
+</div>
+<div class="setting-card">
+<div class="setting-header">
+<div class="setting-title">✨ Particle Animations</div>
+<div class="toggle active" onclick="toggleSetting(this)">
+<div class="toggle-circle"></div>
+</div>
+</div>
+<div class="setting-desc">Show animated particles in the background for enhanced visual experience</div>
+</div>
+<div class="setting-card">
+<div class="setting-header">
+<div class="setting-title">🎉 Confetti Effects</div>
+<div class="toggle active" onclick="toggleSetting(this)">
+<div class="toggle-circle"></div>
+</div>
+</div>
+<div class="setting-desc">Display confetti animation when generating PDF reports</div>
+</div>
+<div class="setting-card">
+<div class="setting-header">
+<div class="setting-title">🌓 Dark Mode</div>
+<div class="toggle active" id="darkModeToggle" onclick="toggleDarkMode()">
+<div class="toggle-circle"></div>
+</div>
+</div>
+<div class="setting-desc">Switch between dark and light theme (dark mode is recommended for better experience)</div>
+</div>
+<div class="setting-card">
+<div class="setting-title">📚 Default Subject</div>
+<div class="setting-desc">Set a default subject for quick evaluations</div>
+<div class="input-group">
+<label>Select Default Subject</label>
+<select>
+<option value="">None</option>
+<option class="opt-excellent" value="Computer Science">Computer Science</option>
+<option class="opt-good" value="Software Engineering">Software Engineering</option>
+<option class="opt-average" value="Data Science">Data Science</option>
+<option class="opt-good" value="AI & Machine Learning">AI & Machine Learning</option>
+<option class="opt-excellent" value="Web Development">Web Development</option>
+<option class="opt-poor" value="Mobile Development">Mobile Development</option>
+</select>
+</div>
+</div>
+<div class="setting-card">
+<div class="setting-title">📧 Email Notifications</div>
+<div class="setting-desc">Receive email notifications for completed evaluations</div>
+<div class="input-group">
+<label>Email Address</label>
+<input type="email" placeholder="your.email@example.com">
+</div>
+</div>
+<div class="setting-card">
+<div class="setting-title">📄 PDF Settings</div>
+<div class="setting-desc">Customize PDF report generation</div>
+<div class="input-group">
+<label>Report Header</label>
+<input type="text" placeholder="VibeCoding Evaluation Report" value="VibeCoding Evaluation Report">
+</div>
+<div class="input-group">
+<label>Evaluator Name</label>
+<input type="text" placeholder="Your Name">
+</div>
+</div>
+</div>
+<button class="btn-save" onclick="saveSettings()">💾 Save All Settings</button>
+</div>
+<script>
+const THEME_KEY = 'vc_theme';
+
+function createParticles(){const c=document.getElementById('particles');for(let i=0;i<50;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.animationDelay=Math.random()*15+'s';p.style.animationDuration=(10+Math.random()*10)+'s';c.appendChild(p)}}
+function toggleSetting(el){el.classList.toggle('active')}
+function applyTheme(theme){
+  const isLight = theme === 'light';
+  document.body.classList.toggle('light-mode', isLight);
+  const toggle = document.getElementById('darkModeToggle');
+  if(toggle) toggle.classList.toggle('active', !isLight);
+}
+function toggleDarkMode(){
+  const isLight = document.body.classList.contains('light-mode');
+  const next = isLight ? 'dark' : 'light';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+function initTheme(){
+  const stored = localStorage.getItem(THEME_KEY);
+  const theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+  applyTheme(theme);
+}
+function saveSettings(){alert('✅ Settings saved successfully!');setTimeout(()=>window.location.href='/dashboard',1000)}
+window.onload=()=>{createParticles();initTheme();};
+</script>
+</body>
+</html>

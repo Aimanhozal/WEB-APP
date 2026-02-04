@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔄 Compare Students</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;min-height:100vh}#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out}@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}.navbar{position:relative;z-index:2;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)}.navbar h1{color:#fff;font-size:1.5em}.btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s}.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(102,126,234,0.4)}.container{position:relative;z-index:2;max-width:1400px;margin:40px auto;padding:20px}.header{text-align:center;color:#fff;margin-bottom:40px}.header h2{font-size:2.5em;margin-bottom:10px}.select-container{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:40px;position:relative;z-index:3}.select-box{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:30px;position:relative;z-index:3}.select-box h3{color:#fff;margin-bottom:20px;font-size:1.3em}.select-box select{width:100%;padding:15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em}.radar-container{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:40px;margin-bottom:30px;position:relative;z-index:2}.radar-chart{width:600px;height:600px;margin:0 auto;position:relative}.comparison-table{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:30px;overflow-x:auto}table{width:100%;border-collapse:collapse;color:#fff}th{background:rgba(102,126,234,0.2);padding:15px;text-align:left;font-weight:600;border-bottom:2px solid rgba(102,126,234,0.5)}td{padding:15px;border-bottom:1px solid rgba(255,255,255,0.1)}.winner{background:rgba(16,185,129,0.2);font-weight:bold}.no-data{text-align:center;padding:60px;color:#a0aec0;font-size:1.2em}
+select{color:#fff !important;background-color:#1a1a3e !important}
+select option{background-color:#2a2a5e !important;color:#ffffff !important;padding:12px !important;font-weight:500 !important}
+select option:hover,select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+body.light-mode select{background-color:#ffffff !important;color:#000000 !important}
+body.light-mode select option{background-color:#ffffff !important;color:#000000 !important;font-weight:500 !important;padding:12px !important}
+body.light-mode select option:hover,body.light-mode select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+body.light-mode select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}
+
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<nav class="navbar">
+<h1>🔄 Compare Students Performance</h1>
+<a href="/dashboard" class="btn">← Dashboard</a>
+</nav>
+<div class="container">
+<div class="header">
+<h2>📈 Student Comparison Tool</h2>
+<p style="color:#a0aec0">Compare performance between two students</p>
+</div>
+{% if students|length >= 2 %}
+<div class="select-container">
+<div class="select-box">
+<h3>👤 Student 1</h3>
+<select id="student1" onchange="updateComparison()">
+<option value="">Select Student</option>
+{% for student in students %}
+<option value="{{loop.index0}}">{{student.name}} ({{student.id}})</option>
+{% endfor %}
+</select>
+</div>
+<div class="select-box">
+<h3>👥 Student 2</h3>
+<select id="student2" onchange="updateComparison()">
+<option value="">Select Student</option>
+{% for student in students %}
+<option value="{{loop.index0}}">{{student.name}} ({{student.id}})</option>
+{% endfor %}
+</select>
+</div>
+</div>
+<div class="radar-container" id="radarContainer" style="display:none">
+<h3 style="color:#fff;text-align:center;margin-bottom:30px;font-size:1.5em">🎯 Performance Radar Chart</h3>
+<canvas id="radarChart" width="600" height="600"></canvas>
+</div>
+<div class="comparison-table" id="comparisonTable" style="display:none">
+<h3 style="color:#fff;margin-bottom:20px;font-size:1.3em">📊 Detailed Comparison</h3>
+<table id="detailsTable"></table>
+</div>
+{% else %}
+<div class="comparison-table">
+<div class="no-data">
+💭 Need at least 2 students to compare. Evaluate more students first!
+</div>
+</div>
+{% endif %}
+</div>
+<script>
+const students={{students|tojson}};const rubrics={{rubrics|tojson}};function createParticles(){const c=document.getElementById('particles');for(let i=0;i<50;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.animationDelay=Math.random()*15+'s';p.style.animationDuration=(10+Math.random()*10)+'s';c.appendChild(p)}}
+function updateComparison(){const s1=document.getElementById('student1').value;const s2=document.getElementById('student2').value;const radar=document.getElementById('radarContainer');const table=document.getElementById('comparisonTable');if(s1&&s2&&s1!==s2){const student1=students[s1];const student2=students[s2];radar.style.display='block';table.style.display='block';drawRadarChart(student1,student2);createComparisonTable(student1,student2)}else{radar.style.display='none';table.style.display='none'}}function drawRadarChart(s1,s2){const canvas=document.getElementById('radarChart');const ctx=canvas.getContext('2d');const centerX=300;const centerY=300;const radius=200;ctx.clearRect(0,0,600,600);const categories=Object.keys(rubrics);const angleStep=(Math.PI*2)/categories.length;ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;for(let i=1;i<=5;i++){ctx.beginPath();ctx.arc(centerX,centerY,radius*(i/5),0,Math.PI*2);ctx.stroke()}categories.forEach((cat,i)=>{const angle=angleStep*i-Math.PI/2;const x=centerX+Math.cos(angle)*radius;const y=centerY+Math.sin(angle)*radius;ctx.beginPath();ctx.moveTo(centerX,centerY);ctx.lineTo(x,y);ctx.stroke();ctx.fillStyle='#fff';ctx.font='12px Arial';ctx.textAlign='center';const labelX=centerX+Math.cos(angle)*(radius+30);const labelY=centerY+Math.sin(angle)*(radius+30);ctx.fillText(cat.substring(0,20),labelX,labelY)});function drawStudent(student,color){ctx.beginPath();categories.forEach((cat,i)=>{const score=student.scores[cat]||0;const maxScore=rubrics[cat].max_points;const percentage=score/maxScore;const angle=angleStep*i-Math.PI/2;const x=centerX+Math.cos(angle)*radius*percentage;const y=centerY+Math.sin(angle)*radius*percentage;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.closePath();ctx.fillStyle=color+'33';ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.stroke()}drawStudent(s1,'#667eea');drawStudent(s2,'#10b981');ctx.fillStyle='#667eea';ctx.fillRect(50,550,20,20);ctx.fillStyle='#fff';ctx.fillText(s1.name,80,565);ctx.fillStyle='#10b981';ctx.fillRect(250,550,20,20);ctx.fillStyle='#fff';ctx.fillText(s2.name,280,565)}function createComparisonTable(s1,s2){const table=document.getElementById('detailsTable');let html='<thead><tr><th>Category</th><th>'+s1.name+'</th><th>'+s2.name+'</th><th>Winner</th></tr></thead><tbody>';Object.keys(rubrics).forEach(cat=>{const score1=s1.scores[cat]||0;const score2=s2.scores[cat]||0;const max=rubrics[cat].max_points;const winner=score1>score2?s1.name:(score2>score1?s2.name:'Tie');html+=`<tr><td>${cat}</td><td>${score1}/${max}</td><td>${score2}/${max}</td><td class="${winner!=='Tie'?'winner':''}">${winner}</td></tr>`});html+=`<tr style="font-weight:bold;background:rgba(102,126,234,0.2)"><td>Total</td><td>${s1.total_score}/70</td><td>${s2.total_score}/70</td><td class="winner">${s1.total_score>s2.total_score?s1.name:(s2.total_score>s1.total_score?s2.name:'Tie')}</td></tr>`;html+=`<tr style="font-weight:bold"><td>Percentage</td><td>${s1.percentage.toFixed(1)}%</td><td>${s2.percentage.toFixed(1)}%</td><td>-</td></tr>`;html+=`<tr style="font-weight:bold"><td>Grade</td><td>${s1.grade}</td><td>${s2.grade}</td><td>-</td></tr></tbody>`;table.innerHTML=html}
+window.onload=()=>{createParticles();};
+</script>
+</body>
+</html>

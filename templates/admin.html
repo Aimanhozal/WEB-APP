@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🔧 Admin Panel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;min-height:100vh}#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out}@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}.navbar{position:relative;z-index:2;background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1)}.navbar h1{color:#fff;font-size:1.5em}.btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s}.btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(102,126,234,0.4)}.container{position:relative;z-index:2;max-width:1200px;margin:40px auto;padding:20px}.header{text-align:center;color:#fff;margin-bottom:40px}.header h2{font-size:2.5em;margin-bottom:10px}.rubric-card{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:30px;margin-bottom:25px;transition:all 0.3s}.rubric-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(102,126,234,0.3)}.rubric-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.rubric-title{color:#fff;font-size:1.5em;font-weight:600}.rubric-points{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:10px 20px;border-radius:20px;font-weight:bold}.criteria-list{margin-top:15px}.criteria-item{background:rgba(255,255,255,0.05);padding:15px;border-radius:10px;margin-bottom:10px;color:#a0aec0}.criteria-range{color:#667eea;font-weight:bold;margin-right:10px}.btn-edit{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;padding:8px 15px;border-radius:8px;cursor:pointer;margin-right:10px;transition:all 0.3s}.btn-edit:hover{transform:translateY(-2px)}.btn-delete{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;padding:8px 15px;border-radius:8px;cursor:pointer;transition:all 0.3s}.btn-delete:hover{transform:translateY(-2px)}.btn-add{width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;font-size:1.1em;font-weight:bold;cursor:pointer;transition:all 0.3s;margin-top:20px}.btn-add:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(16,185,129,0.4)}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<nav class="navbar">
+<h1>🔧 Admin Panel - Manage Rubrics</h1>
+<a href="/dashboard" class="btn">← Dashboard</a>
+</nav>
+<div class="container">
+<div class="header">
+<h2>📋 Evaluation Rubrics</h2>
+<p style="color:#a0aec0">Manage and customize evaluation criteria</p>
+</div>
+{% for category, details in rubrics.items() %}
+<div class="rubric-card">
+<div class="rubric-header">
+<div class="rubric-title">{{category}}</div>
+<div class="rubric-points">Max: {{details.max_points}} Points</div>
+</div>
+<div class="criteria-list">
+{% for criterion in details.criteria %}
+<div class="criteria-item">
+<span class="criteria-range">{{criterion.range}} points:</span>
+<span>{{criterion.description}}</span>
+</div>
+{% endfor %}
+</div>
+<div style="margin-top:15px">
+<button class="btn-edit" onclick="editRubric('{{category}}')">✏️ Edit</button>
+<button class="btn-delete" onclick="deleteRubric('{{category}}')">🗑️ Delete</button>
+</div>
+</div>
+{% endfor %}
+<button class="btn-add" onclick="addRubric()">➕ Add New Rubric Category</button>
+</div>
+<script>
+const RUBRICS = {{ rubrics | tojson | safe }};
+function createParticles(){const c=document.getElementById('particles');for(let i=0;i<50;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.animationDelay=Math.random()*15+'s';p.style.animationDuration=(10+Math.random()*10)+'s';c.appendChild(p)}}
+function buildCriteriaPrompt(criteria){
+  return (criteria||[]).map(c=>`${c.range} | ${c.description}`).join('\n');
+}
+function parseCriteriaInput(raw){
+  const lines = String(raw||'').split('\n').map(l=>l.trim()).filter(Boolean);
+  return lines.map(l=>{
+    const parts = l.split('|');
+    const range = (parts[0]||'').trim();
+    const description = (parts.slice(1).join('|')||'').trim();
+    return {range, description};
+  }).filter(c=>c.range && c.description);
+}
+async function editRubric(category){
+  const current = RUBRICS[category] || {max_points:0, criteria:[]};
+  const maxPoints = prompt(`Max points for "${category}"`, current.max_points);
+  if(maxPoints === null) return;
+  const criteriaInput = prompt('Criteria lines: "range | description" (one per line)', buildCriteriaPrompt(current.criteria));
+  if(criteriaInput === null) return;
+  const criteria = parseCriteriaInput(criteriaInput);
+  const res = await fetch('/admin/rubric/update', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({category, max_points: maxPoints, criteria})});
+  if(res.ok){ location.reload(); } else { alert('Failed to update rubric'); }
+}
+async function deleteRubric(category){
+  if(!confirm('⚠️ Are you sure you want to delete: '+category+'?')) return;
+  const res = await fetch('/admin/rubric/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({category})});
+  if(res.ok){ location.reload(); } else { alert('Failed to delete rubric'); }
+}
+async function addRubric(){
+  const category = prompt('New rubric category name');
+  if(!category) return;
+  const maxPoints = prompt(`Max points for "${category}"`, '5');
+  if(maxPoints === null) return;
+  const criteriaInput = prompt('Criteria lines: "range | description" (one per line)', '5-4 | Excellent\n3-2 | Good\n1-0 | Needs improvement');
+  if(criteriaInput === null) return;
+  const criteria = parseCriteriaInput(criteriaInput);
+  const res = await fetch('/admin/rubric/update', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({category, max_points: maxPoints, criteria})});
+  if(res.ok){ location.reload(); } else { alert('Failed to add rubric'); }
+}
+window.onload=createParticles;
+</script>
+</body>
+</html>

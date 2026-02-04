@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 VibeCoding Evaluation Tool</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;background:#0f0f23;min-height:100vh;overflow-x:hidden;position:relative}#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}.particle{position:absolute;width:4px;height:4px;background:rgba(102,126,234,0.6);border-radius:50%;animation:float 15s infinite ease-in-out;will-change:transform}@keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(50px,-100px,0) scale(1.2)}50%{transform:translate3d(-50px,-50px,0) scale(0.8)}75%{transform:translate3d(30px,-150px,0) scale(1.1)}}.container{max-width:1200px;margin:0 auto;padding:20px;position:relative;z-index:2}.header{text-align:center;color:#fff;margin-bottom:40px;animation:fadeInDown 0.8s ease}.header h1{font-size:3em;margin-bottom:10px;text-shadow:0 0 20px rgba(102,126,234,0.8);animation:glow 2s ease-in-out infinite;will-change:filter}@keyframes glow{0%,100%{filter:drop-shadow(0 0 20px rgba(102,126,234,0.8))}50%{filter:drop-shadow(0 0 40px rgba(102,126,234,1))}}.theme-toggle{position:fixed;top:20px;right:20px;z-index:1000;background:linear-gradient(135deg,#667eea,#764ba2);border:none;padding:15px;border-radius:50%;cursor:pointer;font-size:1.5em;box-shadow:0 5px 15px rgba(0,0,0,0.3);transition:all 0.3s}.theme-toggle:hover{transform:scale(1.1) rotate(180deg)}.card{background:rgba(255,255,255,0.05);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:fadeInUp 0.8s ease;position:relative;overflow:hidden;will-change:transform}.card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(102,126,234,0.1),transparent);animation:shine 3s infinite}@keyframes shine{0%{transform:translate3d(-100%,-100%,0) rotate(45deg)}100%{transform:translate3d(100%,100%,0) rotate(45deg)}}.student-info{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px}.input-group{position:relative}.input-group label{display:block;margin-bottom:8px;color:#a0aec0;font-weight:600}.input-group input{width:100%;padding:12px 15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s}.input-group input:focus{outline:none;border-color:#667eea;box-shadow:0 0 20px rgba(102,126,234,0.5);transform:translateY(-2px)}.progress-ring{width:200px;height:200px;margin:30px auto;position:relative}.progress-ring svg{transform:rotate(-90deg)}.progress-ring circle{fill:none;stroke-width:10;transition:stroke-dashoffset 0.5s}.progress-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;font-size:2em;font-weight:bold}.rubric-section{margin-bottom:30px;padding:25px;background:rgba(255,255,255,0.05);border-radius:15px;border-left:5px solid #667eea;transition:all 0.3s;position:relative;transform-style:preserve-3d}.rubric-section:hover{transform:translateX(10px) scale(1.02);box-shadow:0 10px 30px rgba(102,126,234,0.3)}.rubric-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.rubric-title{font-size:1.2em;color:#fff;font-weight:600}.score-badge{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:8px 20px;border-radius:20px;font-weight:bold;animation:pulse 2s infinite}@keyframes pulse{0%,100%{transform:scale3d(1,1,1)}50%{transform:scale3d(1.05,1.05,1)}}.slider{width:100%;height:8px;border-radius:5px;background:rgba(255,255,255,0.1);outline:none;-webkit-appearance:none;appearance:none;position:relative}.slider::-webkit-slider-thumb{-webkit-appearance:none;width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);cursor:pointer;box-shadow:0 0 20px rgba(102,126,234,0.8);transition:all 0.3s}.slider::-webkit-slider-thumb:hover{transform:scale(1.3);box-shadow:0 0 30px rgba(102,126,234,1)}.comment-box{width:100%;padding:12px;background:rgba(255,255,255,0.05);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;resize:vertical;min-height:80px;transition:all 0.3s}.comment-box:focus{outline:none;border-color:#667eea;box-shadow:0 0 20px rgba(102,126,234,0.5)}
+/* Custom template dropdown */
+.template-dropdown{position:relative}
+.template-btn{width:100%;text-align:left;padding:12px 15px;border-radius:10px;background:rgba(255,255,255,0.03);border:2px solid rgba(102,126,234,0.15);color:#fff;cursor:pointer}
+.dropdown-menu{position:absolute;left:0;right:0;top:calc(100% + 8px);background:rgba(10,12,30,0.98);border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;max-height:260px;overflow:auto;z-index:999}
+.tpl-option{padding:10px;border-radius:8px;margin-bottom:6px;cursor:pointer;color:#fff}
+.tpl-option .tpl-text{color:#e6eef8;white-space:normal}
+.tpl-option.empty{background:transparent;color:#9aa4c7;font-weight:600}
+.tpl-option:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+/* color classes (already defined broadly) */
+.opt-excellent{background:linear-gradient(135deg,#10b981,#059669)}
+.opt-good{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.opt-average{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.opt-poor{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.btn-generate{width:100%;padding:20px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:15px;font-size:1.3em;font-weight:bold;cursor:pointer;transition:all 0.3s;margin-top:30px;box-shadow:0 10px 30px rgba(102,126,234,0.5);position:relative;overflow:hidden}.btn-generate:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(102,126,234,0.7)}.btn-generate:active{transform:translateY(-2px)}.btn-generate::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,0.5);transform:translate(-50%,-50%);transition:width 0.6s,height 0.6s}.btn-generate:hover::after{width:300px;height:300px}
+.btn-continue{padding:12px 18px;background:linear-gradient(135deg,#667eea,#10b981);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer}
+.btn-edit{padding:12px 18px;background:#2d3748;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer} .summary-box{background:linear-gradient(135deg,rgba(102,126,234,0.2),rgba(118,75,162,0.2));border:2px solid rgba(102,126,234,0.3);color:#fff;padding:30px;border-radius:15px;margin-top:30px;text-align:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}.stat-item{background:rgba(255,255,255,0.05);padding:20px;border-radius:10px;transition:all 0.3s}.stat-item:hover{transform:translateY(-5px);background:rgba(255,255,255,0.1)}.stat-value{font-size:2em;font-weight:bold;margin-bottom:5px;color:#667eea}.confetti{position:fixed;width:10px;height:10px;z-index:9999}.emoji-rain{position:fixed;font-size:2em;z-index:9999;animation:fall 3s linear}.achievement{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(0,0,0,0.9);padding:40px;border-radius:20px;z-index:10000;animation:achievementPop 0.5s forwards}.achievement.show{animation:achievementPop 0.5s forwards}@keyframes achievementPop{to{transform:translate(-50%,-50%) scale3d(1,1,1)}}@keyframes fall{to{transform:translate3d(0,100vh,0) rotate(360deg);opacity:0}}@keyframes fadeInDown{from{opacity:0;transform:translate3d(0,-30px,0)}to{opacity:1;transform:translate3d(0,0,0)}}@keyframes fadeInUp{from{opacity:0;transform:translate3d(0,30px,0)}to{opacity:1;transform:translate3d(0,0,0)}}@keyframes shake{0%,100%{transform:translate3d(0,0,0)}25%{transform:translate3d(-10px,0,0)}75%{transform:translate3d(10px,0,0)}}.shake{animation:shake 0.5s}.dark-mode{background:#fff;color:#000}.dark-mode .card{background:rgba(0,0,0,0.05);color:#000}.dark-mode .input-group input,.dark-mode .comment-box{background:rgba(0,0,0,0.05);color:#000}.opt-excellent, select option.opt-excellent{background:linear-gradient(135deg,#10b981,#059669) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+.opt-good, select option.opt-good{background:linear-gradient(135deg,#3b82f6,#2563eb) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+.opt-average, select option.opt-average{background:linear-gradient(135deg,#f59e0b,#d97706) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+.opt-poor, select option.opt-poor{background:linear-gradient(135deg,#ef4444,#dc2626) !important;color:#fff !important;padding:12px !important;font-weight:600 !important}
+select{color:#fff !important;background-color:#1a1a3e !important}select option{background-color:#2a2a5e !important;color:#ffffff !important;padding:12px !important;font-weight:500 !important}select option:hover,select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}.dark-mode select{background-color:#ffffff !important;color:#000000 !important}.dark-mode select option{background-color:#ffffff !important;color:#000000 !important;font-weight:500 !important;padding:12px !important}.dark-mode select option:hover,.dark-mode select option:focus{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}.dark-mode select option:checked{background:linear-gradient(#667eea,#667eea) !important;background-color:#667eea !important;color:#fff !important}@media(max-width:768px){.student-info,.summary-stats{grid-template-columns:1fr}.header h1{font-size:2em}}
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<a href="/dashboard" style="position:fixed;top:20px;left:20px;z-index:1000;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 20px;border-radius:10px;text-decoration:none;transition:all 0.3s;box-shadow:0 5px 15px rgba(0,0,0,0.3)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">← Dashboard</a>
+<div id="particles"></div>
+<div class="container">
+<div class="header">
+<h1>🎓 VibeCoding Evaluation Tool ✨</h1>
+<p>Modern Evaluation Platform with Entertainment Features</p>
+</div>
+<div id="detailsCard" class="card">
+<div style="background:rgba(255,255,255,0.05);padding:30px;border-radius:15px;margin-bottom:30px;border:2px solid rgba(102,126,234,0.3)">
+<h3 style="color:#fff;margin-bottom:20px;font-size:1.3em">📝 Student & Report Details</h3>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+<div class="input-group">
+<label>👤 First Name *</label>
+<input type="text" id="firstName" placeholder="John" required>
+</div>
+<div class="input-group">
+<label>👤 Last Name *</label>
+<input type="text" id="lastName" placeholder="Doe" required>
+</div>
+<div class="input-group">
+<label>🆔 Matriculation Number *</label>
+<input type="text" id="studentId" placeholder="1234567" required>
+</div>
+<div class="input-group">
+<label>♂️ Gender *</label>
+<select id="gender" style="width:100%;padding:12px 15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s" required>
+<option value="">Select Gender</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div class="input-group" style="grid-column:1/-1">
+<label>📚 Report Type *</label>
+<select id="reportType" style="width:100%;padding:12px 15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s" required>
+<option value="">Select Report Type</option>
+<option class="opt-excellent" value="Seminar Report">Seminar Report (Presentation 15pts + Report 75pts + Peer 10pts)</option>
+<option class="opt-good" value="Research-driven Thesis">Research-driven Thesis (General 30pts + Theory 30pts + Research 40pts)</option>
+<option class="opt-average" value="Design-driven + Evaluation">Design-driven + Small Evaluation (General 30pts + Development 50pts + Evaluation 20pts)</option>
+<option class="opt-good" value="Design-driven Thesis">Design-driven Thesis (General 30pts + Development 70pts)</option>
+<option class="opt-poor" value="ML/NLP Thesis">ML/NLP Based Thesis (General 30pts + Modeling 50pts + Evaluation 20pts)</option>
+</select>
+</div>
+<div class="input-group" style="grid-column:1/-1">
+<label>📝 Report Title</label>
+<input type="text" id="reportTitle" placeholder="Enter report title (max 320 characters)" maxlength="320" style="width:100%;padding:12px 15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s">
+</div>
+<div class="input-group">
+<label>📅 Seminar Date</label>
+<input type="date" id="seminarDate" style="width:100%;padding:12px 15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s">
+</div>
+<div class="input-group">
+<label>⏰ Seminar Time</label>
+<input type="time" id="seminarTime" style="width:100%;padding:12px 15px;background:rgba(255,255,255,0.1);border:2px solid rgba(102,126,234,0.3);border-radius:10px;color:#fff;font-size:1em;transition:all 0.3s">
+</div>
+</div>
+<p style="color:#a0aec0;font-size:0.85em;margin-top:15px">ℹ️ Fields marked with * are required</p>
+<div style="margin-top:12px;display:flex;gap:10px">
+  <button id="continueBtn" onclick="continueToRubrics()" style="padding:12px 18px;background:linear-gradient(135deg,#667eea,#10b981);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">Continue to Evaluation →</button>
+  <button id="editDetailsBtn" onclick="editDetails()" style="display:none;padding:12px 18px;background:#2d3748;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer">✏️ Edit Details</button>
+</div>
+</div>
+<div class="progress-ring">
+<svg width="200" height="200">
+<circle cx="100" cy="100" r="90" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
+<circle id="progressCircle" cx="100" cy="100" r="90" stroke="#667eea" stroke-width="10" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
+</svg>
+<div class="progress-text" id="progressText">0%</div>
+</div>
+<div id="rubricsContainer"></div>
+<div class="summary-box">
+<h2>📊 Overall Summary</h2>
+<div class="summary-stats">
+<div class="stat-item">
+<div class="stat-value" id="totalScore">0</div>
+<div>Points / 70</div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="percentage">0%</div>
+<div>Percentage</div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="grade">-</div>
+<div>Grade</div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:30px">
+<button onclick="quickFill('excellent')" style="padding:15px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:10px;cursor:pointer;transition:all 0.3s;font-weight:bold" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">⭐ Quick Fill: Excellent</button>
+<button onclick="quickFill('good')" style="padding:15px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:10px;cursor:pointer;transition:all 0.3s;font-weight:bold" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">👍 Quick Fill: Good</button>
+<button onclick="quickFill('average')" style="padding:15px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:10px;cursor:pointer;transition:all 0.3s;font-weight:bold" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">📊 Quick Fill: Average</button>
+</div>
+<button class="btn-generate" onclick="generateReport()">🎉 Generate PDF Report</button>
+</div>
+</div>
+<div id="achievement" class="achievement" style="display:none">
+<h2>🏆 Achievement Unlocked!</h2>
+<p id="achievementText"></p>
+</div>
+<script>
+var rubrics = {{ rubrics|tojson if rubrics else '{}' }};
+var commentTemplates = {{ comment_templates|tojson if comment_templates else '{}' }};
+var GROUPS = {{ groups|tojson if groups else '{}' }};
+let scores = {};
+let comments = {};
+let soundEnabled = true;
+
+function createParticles(){
+  const container = document.getElementById('particles');
+  for(let i = 0; i < 50; i++){
+	const particle = document.createElement('div');
+	particle.className = 'particle';
+	particle.style.left = Math.random() * 100 + '%';
+	particle.style.top = Math.random() * 100 + '%';
+	particle.style.animationDelay = Math.random() * 15 + 's';
+	particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+	container.appendChild(particle);
+  }
+}
+
+function playSound(type){
+  if(!soundEnabled) return;
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  if(type === 'click'){
+	osc.frequency.value = 800;
+	gain.gain.value = 0.1;
+	osc.start();
+	osc.stop(ctx.currentTime + 0.1);
+  } else if(type === 'success'){
+	osc.frequency.value = 1200;
+	gain.gain.value = 0.2;
+	osc.start();
+	osc.stop(ctx.currentTime + 0.2);
+  }
+}
+
+function applyTemplate(category, templateIndex){
+  if(templateIndex === '') return;
+  const template = commentTemplates[category][parseInt(templateIndex)];
+  const sliderElement = document.getElementById(`slider-${category}`);
+  const details = rubrics[category];
+  if(sliderElement) sliderElement.value = template.score;
+  document.getElementById(`comment-${category}`).value = template.text;
+  updateScore(category, template.score, details.max_points);
+  playSound('click');
+}  
+
+function initializeRubrics(){
+  const container = document.getElementById('rubricsContainer');
+  container.innerHTML = '';
+  const groups = Object.keys(GROUPS || {}).length ? GROUPS : { 'All': Object.keys(rubrics) };
+  for(const [group, cats] of Object.entries(groups)){
+    const gid = group.replace(/\s+/g,'_');
+    const groupSection = document.createElement('div');
+    groupSection.className = 'rubric-section';
+    groupSection.style.padding = '18px';
+    const header = document.createElement('div'); header.style.display='flex'; header.style.justifyContent='space-between'; header.style.alignItems='center'; header.style.marginBottom='12px';
+    header.innerHTML = `<div style="font-weight:700">${group}</div><div style="color:#a0aec0">Subtotal: <span id="group-${gid}-score">0</span> / <span id="group-${gid}-max">0</span> — <span id="group-${gid}-percent">0%</span></div>`;
+    groupSection.appendChild(header);
+
+    // compute and set group max
+    let gmax = 0; cats.forEach(cat => { if(rubrics[cat]) gmax += rubrics[cat].max_points || 0; });
+    const maxEl = groupSection.querySelector(`#group-${gid}-max`);
+    if(maxEl) maxEl.textContent = gmax;
+
+    // categories
+    cats.forEach(category => {
+      const details = rubrics[category];
+      if(!details) return;
+      const section = document.createElement('div');
+      section.className = 'rubric-section';
+      let criteriaHTML = '<div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:10px;margin-top:10px;color:#a0aec0">';
+      details.criteria.forEach(c => {
+        criteriaHTML += `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1)"><strong>${c.range} points:</strong> ${c.description}</div>`;
+      });
+      criteriaHTML += '</div>';
+      let templateOptionsHtml = '<div class="tpl-option empty" data-index="">-- Choose template --</div>';
+      if(commentTemplates[category]){
+        commentTemplates[category].forEach((t, i) => {
+          let cls = '';
+          if (t.score >= 8) cls = 'opt-excellent';
+          else if (t.score >= 6) cls = 'opt-good';
+          else if (t.score >= 4) cls = 'opt-average';
+          else cls = 'opt-poor';
+          templateOptionsHtml += `<div class="tpl-option ${cls}" data-index="${i}" data-score="${t.score}"><div style="font-weight:700">${t.score} points</div><div class="tpl-text" style="margin-top:6px;color:#fff;white-space:normal">${t.text}</div></div>`;
+        });
+      }
+      section.innerHTML = `<div class="rubric-header"><div class="rubric-title">${category}</div><div class="score-badge" id="badge-${category}">0 / ${details.max_points}</div></div><div style="margin:20px 0"><input type="range" min="0" max="${details.max_points}" value="0" class="slider" id="slider-${category}" oninput="updateScore('${category}',this.value,${details.max_points})"></div>${criteriaHTML}<div style="margin-top:15px"><label style="display:block;margin-bottom:8px;color:#a0aec0;font-weight:600">📋 Templates:</label><div class="template-dropdown" id="template-${category}"><button class="template-btn">-- Choose template --</button><div class="dropdown-menu" style="display:none">${templateOptionsHtml}</div></div></div><div><label style="display:block;margin-bottom:8px;color:#a0aec0;font-weight:600">💬 Comment:</label><textarea class="comment-box" id="comment-${category}" placeholder="Add evaluation comments here..."></textarea></div>`;
+      groupSection.appendChild(section);
+      scores[category] = 0;
+      comments[category] = '';
+
+      // attach dropdown handlers (show full comments on click)
+      const dropdown = section.querySelector(`#template-${category}`);
+      if(dropdown){
+        const btn = dropdown.querySelector('.template-btn');
+        const menu = dropdown.querySelector('.dropdown-menu');
+        btn.addEventListener('click', (e)=>{e.stopPropagation(); menu.style.display = menu.style.display === 'block' ? 'none' : 'block';});
+        menu.addEventListener('click', (e)=>{
+          const opt = e.target.closest('.tpl-option');
+          if(!opt || opt.classList.contains('empty')) return;
+          const idx = opt.dataset.index;
+          applyTemplate(category, idx);
+          const short = opt.querySelector('.tpl-text') ? opt.querySelector('.tpl-text').textContent : opt.textContent;
+          btn.textContent = short && short.length>60 ? short.slice(0,60) + '...' : short;
+          menu.style.display = 'none';
+        });
+        if(!window.__tplDocListenerAdded){
+          document.addEventListener('click', ()=>{ document.querySelectorAll('.dropdown-menu').forEach(m=>m.style.display='none'); });
+          window.__tplDocListenerAdded = true;
+        }
+      }
+    });
+
+    container.appendChild(groupSection);
+  }
+  updateSummary();
+}  
+
+function updateScore(category, value, maxPoints){
+  scores[category] = parseInt(value);
+  document.getElementById(`badge-${category}`).textContent = `${value} / ${maxPoints}`;
+  playSound('click');
+  updateSummary();
+  checkAchievements();
+}
+
+function updateSummary(){
+  let total = 0; let maxTotal = 0;
+  // compute group subtotals
+  const groups = Object.keys(GROUPS || {}).length ? GROUPS : { 'All': Object.keys(rubrics) };
+  for(const [group, cats] of Object.entries(groups)){
+    let gsum = 0; let gmax = 0;
+    for(const cat of cats){
+      gsum += Number(scores[cat] || 0);
+      gmax += (rubrics[cat] && rubrics[cat].max_points) ? rubrics[cat].max_points : 0;
+    }
+    const gid = group.replace(/\s+/g,'_');
+    const scoreEl = document.getElementById(`group-${gid}-score`);
+    const percentEl = document.getElementById(`group-${gid}-percent`);
+    if(scoreEl) scoreEl.textContent = `${gsum} / ${gmax}`;
+    if(percentEl) percentEl.textContent = (gmax ? Math.round((gsum/gmax)*100) : 0) + '%';
+    total += gsum; maxTotal += gmax;
+  }
+  const percentage = maxTotal ? ((total / maxTotal) * 100).toFixed(1) : 0;
+  const grade = getGrade(percentage);
+  document.getElementById('totalScore').textContent = total;
+  document.getElementById('percentage').textContent = percentage + '%';
+  document.getElementById('grade').textContent = grade;
+  document.getElementById('progressText').textContent = percentage + '%';
+  const circle = document.getElementById('progressCircle');
+  const offset = 565.48 - (565.48 * percentage / 100);
+  circle.style.strokeDashoffset = offset;
+}
+
+function getGrade(percentage){
+  if(percentage >= 90) return '1.0-1.3';
+  if(percentage >= 80) return '1.7-2.3';
+  if(percentage >= 70) return '2.7-3.3';
+  if(percentage >= 60) return '3.7-4.0';
+  return '5.0';
+}
+
+function checkAchievements(){
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  if(total === 35) showAchievement('🌟 Halfway There!', 'You reached 50%!');
+  if(total === 70) showAchievement('🏆 Perfect Score!', 'All 70 points achieved!');
+}
+
+function showAchievement(title, text){
+  const ach = document.getElementById('achievement');
+  document.getElementById('achievementText').innerHTML = `<strong>${title}</strong><br>${text}`;
+  ach.style.display = 'block';
+  ach.classList.add('show');
+  playSound('success');
+  setTimeout(() => {
+	ach.style.display = 'none';
+	ach.classList.remove('show');
+  }, 3000);
+}
+
+function createConfetti(){
+  for(let i = 0; i < 100; i++){
+	setTimeout(() => {
+	  const confetti = document.createElement('div');
+	  confetti.className = 'confetti';
+	  confetti.style.left = Math.random() * 100 + '%';
+	  confetti.style.top = '-10px';
+	  confetti.style.background = `hsl(${Math.random() * 360},100%,50%)`;
+	  confetti.style.animation = 'fall 3s linear';
+	  document.body.appendChild(confetti);
+	  setTimeout(() => confetti.remove(), 3000);
+	}, i * 30);
+  }
+}
+
+function createEmojiRain(emoji){
+  for(let i = 0; i < 20; i++){
+	setTimeout(() => {
+	  const rain = document.createElement('div');
+	  rain.className = 'emoji-rain';
+	  rain.textContent = emoji;
+	  rain.style.left = Math.random() * 100 + '%';
+	  rain.style.top = '-50px';
+	  document.body.appendChild(rain);
+	  setTimeout(() => rain.remove(), 3000);
+	}, i * 100);
+  }
+}
+
+async function generateReport(){
+  const firstName = document.getElementById('firstName').value;
+  const lastName = document.getElementById('lastName').value;
+  const studentId = document.getElementById('studentId').value;
+  const gender = document.getElementById('gender').value;
+  const reportType = document.getElementById('reportType').value;
+  const reportTitle = document.getElementById('reportTitle').value;
+  const seminarDate = document.getElementById('seminarDate').value;
+  const seminarTime = document.getElementById('seminarTime').value;
+  if(!firstName || !lastName || !studentId || !gender || !reportType){
+	const inputs = document.querySelectorAll('.input-group input');
+	inputs.forEach(inp => {
+	  inp.classList.add('shake');
+	  setTimeout(() => inp.classList.remove('shake'), 500);
+	});
+	alert('⚠️ Please fill in all required fields!');
+	return;
+  }
+  for(const [category, _] of Object.entries(rubrics)){
+	comments[category] = document.getElementById(`comment-${category}`).value || 'No comment';
+  }
+  createConfetti();
+  const percentage = ((Object.values(scores).reduce((a, b) => a + b, 0) / 70) * 100);
+  if(percentage >= 90) createEmojiRain('🎉');
+  else if(percentage >= 70) createEmojiRain('🚀');
+  else createEmojiRain('💪');
+  playSound('success');
+  const response = await fetch('/generate_report', {
+	method: 'POST',
+	headers: {'Content-Type': 'application/json'},
+	body: JSON.stringify({
+	  first_name: firstName,
+	  last_name: lastName,
+	  student_id: studentId,
+	  gender: gender,
+	  report_type: reportType,
+	  report_title: reportTitle,
+	  seminar_date: seminarDate,
+	  seminar_time: seminarTime,
+	  scores: scores,
+	  comments: comments
+	})
+  });
+  if(response.ok){
+	const blob = await response.blob();
+	const url = window.URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = `evaluation_${studentId}.pdf`;
+	document.body.appendChild(a);
+	a.click();
+	window.URL.revokeObjectURL(url);
+	a.remove();
+	showAchievement('🎉 Success!', 'PDF Report generated successfully!');
+  } else {
+	alert('❌ Error generating report!');
+  }
+}
+
+function toggleTheme(){
+  document.body.classList.toggle('dark-mode');
+  const btn = document.querySelector('.theme-toggle');
+  btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌓';
+}
+
+function quickFill(level){
+  const percentages = {'excellent': 0.95, 'good': 0.8, 'average': 0.7};
+  const pct = percentages[level];
+  for(const [category, details] of Object.entries(rubrics)){
+	const value = Math.floor(details.max_points * pct);
+	document.getElementById(`slider-${category}`).value = value;
+	updateScore(category, value, details.max_points);
+  }
+  playSound('success');
+  showAchievement('⚡ Quick Fill!', `All scores set to ${level} level`);
+} 
+
+window.onload = () => {
+  createParticles();
+  initializeRubrics();
+};
+</script>
+</body>
+</html>
